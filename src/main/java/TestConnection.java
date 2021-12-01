@@ -1,3 +1,4 @@
+import Data.IPersonaDAO;
 import Data.MakeConnection;
 import Data.PersonDAO;
 import Domain.Person;
@@ -6,8 +7,19 @@ import org.postgresql.util.PSQLException;
 import java.sql.*;
 import java.util.List;
 
+
+// this class represent the presentation or view layer
+
+// the objective of the software design is minimize the cost of development
+
+// Cohesion: How much a software component is responsible for doing only one thing for what it was created.
+// All the other complementary tasks are delegated to other components
+
+// Coupling: It measures the relation between the changes made in one component and the necessity of also make changes
+// in the related components
+
 public class TestConnection {
-    private static final PersonDAO personDao = new PersonDAO();
+    private static final IPersonaDAO personDao = new PersonDAO();
 
     private static void printList() {
         List<Person> persons = personDao.list();
@@ -43,9 +55,9 @@ public class TestConnection {
         // Now we are going to do a transactional example
         Connection connection = null;
         try {
-            connection = MakeConnection.getConnection();
+            connection = MakeConnection.getPoolConnection();
             connection.setAutoCommit(false);
-            PersonDAO transDao = new PersonDAO(connection);
+            IPersonaDAO transDao = new PersonDAO(connection);
             // let's do 3 operations in one transaction
 
             //test update Method
@@ -53,15 +65,15 @@ public class TestConnection {
             transDao.update(updatePerson);
 
             // test delete method
-            transDao.delete(new Person(6));
+            transDao.delete(new Person(13));
 
             //test insert method
-            Person newPerson = new Person("Amelie Paulette", 28, "In my heart", 13);
+            Person newPerson = new Person("Amelie Paulette", 28, "In my heart", 14);
             transDao.insert(newPerson);
 
             connection.commit();
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("We enter to the rollback step of the transaction");
             try {

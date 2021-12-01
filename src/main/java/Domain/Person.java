@@ -1,5 +1,7 @@
 package Domain;
 
+// This class represent the main subject of the project
+
 public class Person {
     private String name;
     private int age;

@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonDAO {
+// this class represent the layer of business logic
+
+public class PersonDAO implements IPersonaDAO {
     private static final String LIST = "SELECT * FROM public.\"Persons\" ORDER BY id ASC";
     private static final String INSERT = "INSERT INTO public.\"Persons\" (age, name, address, id) VALUES (?,?,?,?);";
     private static final String UPDATE = "UPDATE public.\"Persons\" SET age=?, name=?, address=? WHERE id=?";
